@@ -78,3 +78,4 @@ ui.argile/ts
 stingray/settings/_FactoryClasses.cpp
 stingray/settings/config/DaemonConfigManager.cpp
 Catch2-build
+cmake-build-debug/
