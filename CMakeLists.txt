@@ -4,3 +4,5 @@ project(HelloTask)
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(HelloTask main.cpp)
+
+target_include_directories(HelloTask PRIVATE templates)
