@@ -3,7 +3,7 @@
 
 #include <string>
 #include <string_view>
-#include <templates/singleton/Singleton.h>
+#include <singleton/Singleton.h>
 
 namespace otus_hw {
 
@@ -14,23 +14,25 @@ namespace otus_hw {
 //static analyzers
 
 
-class ProjectVersion  : public Singleton<ProjectVersion>
-{
-    private:
+	class ProjectVersion {
 
-        const std::string_view PROJECT_VERSION_MAJOR = "@PROJECT_VERSION_MAJOR@";
-        const std::string_view PROJECT_VERSION_MINOR = "@PROJECT_VERSION_MAJOR@";
-        const std::string_view PROJECT_VERSION_BUILD = "@PROJECT_VERSION_MINOR@";
-    
-    public:
+		friend class Singleton<ProjectVersion>;
 
-        std::string GetVersion() const { return ""; }
+	private:
+
+		const std::string_view _projectVersionMajor = "1";
+		const std::string_view _projectVersionMinor = "2";
+		const std::string_view _projectVersionBuild = "3";
+
+	public:
+
+		[[nodiscard]] std::string GetVersion() const {
+			return {std::string(_projectVersionMajor) + "." + std::string(_projectVersionMinor) + "." +
+					std::string(_projectVersionBuild)};
+		}
 
 
-};
-
-
-
+	};
 
 
 }

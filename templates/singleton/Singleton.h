@@ -1,5 +1,6 @@
 #include <mutex>
 #include <atomic>
+#include <iostream>
 
 
 // template <typename T>
@@ -23,36 +24,36 @@
 //     return inst;
 // }
 
+//https://stackoverflow.com/questions/41328038/singleton-template-as-base-class-in-c
+
 template <typename T>
-class Singleton{
+class Singleton {
+	friend T;
 public:
-  static Singleton* getInstance(){
-    Singleton* sin= instance.load();
-    if ( !sin ){
-      std::lock_guard<std::mutex> myLock(myMutex);
-      sin= instance.load();
-      if( !sin ){
-        sin= new Singleton();
-        instance.store(sin);
-      }
-    }   
-    // volatile int dummy{};
-    return sin;
-  }
+	static T& GetInstance(){
+		std::call_once(initInstanceFlag, &Singleton::initSingleton);
+		// volatile int dummy{};
+		return *instance;
+	}
 private:
-  Singleton()= default;
-  ~Singleton()= default;
-  Singleton(const Singleton&)= delete;
-  Singleton& operator=(const Singleton&)= delete;
+	Singleton()= default;
+	~Singleton()= default;
+public:
+	Singleton(const Singleton&)= delete;
+	Singleton& operator=(const Singleton&)= delete;
 
-  static std::atomic<Singleton*> instance;
-  static std::mutex myMutex;
+private:
+	static T* instance;
+	static std::once_flag initInstanceFlag;
+
+	static void initSingleton(){
+		instance = new T;
+	}
 };
+template <typename T>
+T* Singleton<T>::instance= nullptr;
 
 template <typename T>
-std::atomic<Singleton<T>*> Singleton<T>::instance;
-
-template <typename T>
-std::mutex Singleton<T>::myMutex;
+std::once_flag Singleton<T>::initInstanceFlag;
 
 
