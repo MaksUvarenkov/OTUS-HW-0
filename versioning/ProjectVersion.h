@@ -34,7 +34,7 @@ namespace otus_hw {
 
 	};
 
-
+	typedef Singleton<otus_hw::ProjectVersion> VersionProvider;
 }
 
 
