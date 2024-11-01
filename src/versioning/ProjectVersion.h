@@ -3,7 +3,7 @@
 
 #include <string>
 #include <string_view>
-#include <singleton/Singleton.h>
+#include <templates/singleton/Singleton.h>
 
 namespace otus_hw {
 

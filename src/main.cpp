@@ -1,8 +1,7 @@
 #include <iostream>
-#include <ProjectVersion.h>
+#include <versioning/ProjectVersion.h>
 
 //git config --add --local core.sshCommand 'ssh -i [SECRET_SSH_KEY_PATH]'
-
 
 
 int main() {
