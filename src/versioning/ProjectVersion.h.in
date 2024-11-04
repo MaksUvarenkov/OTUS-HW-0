@@ -4,6 +4,7 @@
 #include <string>
 #include <string_view>
 #include <templates/singleton/Singleton.h>
+#include <versioning/Version.h>
 
 namespace otus_hw_0 {
 
@@ -24,13 +25,14 @@ namespace otus_hw_0 {
 		static constexpr std::string_view ProjectVersionMinor = "@PROJECT_VERSION_MINOR@";
 		static constexpr std::string_view ProjectVersionBuild = "@PROJECT_VERSION_BUILD@";
 
+		static constexpr Version VersionOfProject = Version(ProjectVersionMajor, ProjectVersionMinor, ProjectVersionBuild);
+
+
 	public:
 
-		[[nodiscard]] static constexpr std::string GetVersion() {
-			return {std::string(ProjectVersionMajor) + "." + std::string(ProjectVersionMinor) + "." +
-					std::string(ProjectVersionBuild)};
+		[[nodiscard]] static constexpr Version GetVersion() {
+			return VersionOfProject;
 		}
-
 
 	};
 

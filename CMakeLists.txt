@@ -4,7 +4,7 @@ project(HelloTask
 )
 
 set(PROJECT_VERSION_MAJOR 1)
-set(PROJECT_VERSION_MINOR 2)
+set(PROJECT_VERSION_MINOR 119)
 set(PROJECT_VERSION_BUILD 115)
 
 message(PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
@@ -14,7 +14,8 @@ configure_file(${PROJECT_SOURCE_DIR}/src/versioning/ProjectVersion.h.in ${PROJEC
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(HelloTask src/main.cpp)
+add_executable(HelloTask src/main.cpp
+        src/versioning/Version.h)
 
 target_include_directories(HelloTask PRIVATE src)
 
