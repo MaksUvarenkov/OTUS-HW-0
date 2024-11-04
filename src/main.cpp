@@ -12,7 +12,7 @@
 int main() {
 
 	std::cout << "Hello, OTUS World!" << std::endl;
-	std::cout << "Version is: " << otus_hw::VersionProvider::GetInstance().GetVersion() << std::endl;
+	std::cout << "Version is: " << otus_hw_0::VersionProvider::GetInstance().GetVersion() << std::endl;
 
 	return 0;
 }

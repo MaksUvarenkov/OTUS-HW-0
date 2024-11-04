@@ -1,0 +1,41 @@
+#ifndef VERSION_H_IN
+#define VERSION_H_IN
+
+#include <string>
+#include <string_view>
+#include <templates/singleton/Singleton.h>
+
+namespace otus_hw_0 {
+
+//https://community.gigperformer.com/t/getting-cmake-variables-from-c/17711
+//https://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton/
+
+//clang
+//static analyzers
+
+
+	class ProjectVersion {
+
+		friend class Singleton<ProjectVersion>;
+
+	private:
+
+		static constexpr std::string_view ProjectVersionMajor = "@PROJECT_VERSION_MAJOR@";
+		static constexpr std::string_view ProjectVersionMinor = "@PROJECT_VERSION_MINOR@";
+		static constexpr std::string_view ProjectVersionBuild = "@PROJECT_VERSION_BUILD@";
+
+	public:
+
+		[[nodiscard]] static constexpr std::string GetVersion() {
+			return {std::string(ProjectVersionMajor) + "." + std::string(ProjectVersionMinor) + "." +
+					std::string(ProjectVersionBuild)};
+		}
+
+
+	};
+
+	typedef Singleton<otus_hw_0::ProjectVersion> VersionProvider;
+}
+
+
+#endif // VERSION_H_IN
