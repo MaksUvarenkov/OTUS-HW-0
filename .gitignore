@@ -79,3 +79,4 @@ stingray/settings/_FactoryClasses.cpp
 stingray/settings/config/DaemonConfigManager.cpp
 Catch2-build
 cmake-build-debug/
+src/versioning/ProjectVersion.h
