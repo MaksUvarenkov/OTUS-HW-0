@@ -58,6 +58,7 @@ process_option()
 
 	--ninja)
 		CHECK_NINJA_INSTALLATION=1
+		HW0_BUILD_TOOL=ninja
 	;;
 
 	--production)
@@ -119,6 +120,15 @@ configure()
 
 }
 
+build_project()
+{
+	pushd "${BUILD_DIR}" || exit 1
+
+	"${HW0_BUILD_TOOL}" install
+
+	popd || exit 1
+}
+
 get_version()
 {
 	PROJECT_VERSION_MAJOR="$(jq '.major' "${VERSION_FILE}")"
@@ -164,3 +174,4 @@ if [ -z ${SKIP_HW0_CONFIGURATION} ]; then
 
 fi
 
+build_project
