@@ -9,6 +9,10 @@
 
 //I don't like to put Boost in all the projects.
 
+//Implementing Boost tests
+//https://github.com/starokurov/otus-cpp/blob/master/CMakeLists.txt
+
+
 int main() {
 
 	std::cout << "Hello, OTUS World!" << std::endl;
