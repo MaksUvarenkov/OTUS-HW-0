@@ -1,18 +1,17 @@
 #!/bin/bash
 
-[ -z "$(command -v realpath)" ] && printf "%s\n" "ERROR: realpath utility must be installed!" && exit 1
 
-HW0_SOURCE_DIR="$(realpath "$(dirname "$0")")"
 HW0_BINARY_DIR="$(pwd)"
+HW0_SCRIPTS_DIR="${HW0_BINARY_DIR}"/src/scripts
 
 HW0_CONFIGURE_ARGUMENTS=
 HW0_MAKE_ARGUMENTS=
 HW0_BUILD_TOOL="make"
-HW0_INSTALL_PATH=${HW0_BINARY_DIR}/install
+HW0_INSTALL_PATH="${HW0_BINARY_DIR}"/install
 HW0_BUILD_NUMBER=0
 CHECK_NINJA_INSTALLATION=0
 
-BUILD_DIR_PREFIX=build_
+BUILD_DIR="${HW0_BINARY_DIR}"/build
 BUILD_TYPE=Debug
 PRODUCTION_BUILD=0
 
@@ -49,11 +48,6 @@ process_option()
 		HW0_CONFIGURE_ARGUMENTS+=" $1"
 	;;
 
-	--build-tag=*)
-		HW0_BUILD_TAG=${1#--build-tag=}
-		HW0_CONFIGURE_ARGUMENTS+=" $1"
-	;;
-
 	--skip-configuration)
 		SKIP_HW0_CONFIGURATION=true
 	;;
@@ -64,12 +58,7 @@ process_option()
 
 	--production)
 		BUILD_TYPE=MinSizeRel
-		ARGUMENTS="${ARGUMENTS} -DPRODUCTION_BUILD:BOOL=TRUE"
 		PRODUCTION_BUILD=1
-	;;
-
-	--*)
-		HW0_CONFIGURE_ARGUMENTS+=" $1"
 	;;
 
 	-D*)
@@ -88,6 +77,29 @@ process_option()
 	esac
 }
 
+clean_build_dir()
+{
+	rm -rf "${BUILD_DIR}"
+}
+
+
+configure()
+{
+
+	printf "%s\n" "[CONFIG] Arguments: [${HW0_CONFIGURE_ARGUMENTS}] "
+
+	if [ ${PRODUCTION_BUILD} -gt 0 ]; then
+		printf "%s\n" "[CONFIG] Configuring for production"
+	fi
+
+	CMAKE_CMD+="-DCMAKE_BUILD_TYPE=${BUILD_TYPE}"
+	CMAKE_CMD+="${HW0_CONFIGURE_ARGUMENTS}"
+	CMAKE_CMD+=" -S ${HW0_BINARY_DIR}"
+	CMAKE_CMD+=" -B ${BUILD_DIR}"
+	printf "%s\n" "[CONFIG] CMAKE_ARGS: ${CMAKE_CMD}"
+	cmake ${CMAKE_CMD}
+
+}
 
 for ARGUMENT in "${@: 1: $#}"; do
 	NONASCII=$(printf "%s\n" "$ARGUMENT" | perl -pe 's/[[:ascii:]]//g;')
@@ -104,15 +116,22 @@ done
 if [ ${CHECK_NINJA_INSTALLATION} -gt 0 ]; then
 
 		if [ -n "$(command -v ninja 2>/dev/null)" ]; then
-			HW0_BUILD_TOOL=ninja
+			HW0_CONFIGURE_ARGUMENTS+=" -G Ninja"
 		else
 			error "Install ninja first"
 		fi
 
-		HW0_CONFIGURE_ARGUMENTS+=" --ninja"
 fi
 
 args=( "$@" )
-printf "Build arguments: [ "
+printf "[INIT] Deploy arguments: [ "
 printf "%s " "${args[@]}"
 printf " ]\n"
+
+if [ -z ${SKIP_HW0_CONFIGURATION} ]; then
+
+	clean_build_dir
+	configure
+
+fi
+
