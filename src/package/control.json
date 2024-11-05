@@ -1,0 +1,8 @@
+{
+  "package": "package_name",
+  "architecture": "all",
+  "maintainer": "@Uvarenkov",
+  "priority": "optional",
+  "version": "0.0.0",
+  "description": "OTUS HW-0 by Maxim Uvarenkov"
+}

@@ -2,6 +2,7 @@
 
 [ -z "$(command -v realpath)" ] && printf "%s\n" "ERROR: realpath utility must be installed!" && exit 1
 [ -z "$(command -v jq)" ] && printf "%s\n" "ERROR: jq utility must be installed!" && exit 1
+[ -z "$(command -v dpkg-deb)" ] && printf "%s\n" "ERROR: dpkg-deb not found!" && exit 1
 
 HW0_BINARY_DIR="$(pwd)"
 HW0_SCRIPTS_DIR="${HW0_BINARY_DIR}"/src/scripts
@@ -21,10 +22,52 @@ HW0_INSTALL_PREFIX=${HW0_DEFAULT_INSTALL_PREFIX}
 
 VERSION_FILE="${HW0_BINARY_DIR}"/src/versioning/Version.json
 
-#This is hardcoded due to Home Work requirements
-PACKAGE_NAME_PREFIX=helloworld_uvarekov_otus_0
-PACKAGE_VERSION_STRING=""
-HW0_BUILD_NUMBER=
+# PACKAGE_NAME_PREFIX hardcoded due to Home Work requirements
+PACKAGE_NAME_PREFIX=helloworld-uvarekov
+PACKAGE_BUILD_DIR="${BUILD_DIR}"/package_build
+PACKAGE_VERSION=0.0.0
+PACKAGE_CONTROL_FILE="${HW0_BINARY_DIR}"/src/package/control.json
+EXECUTABLE_NAME=HelloTask
+
+
+create_package_control_file()
+{
+	touch control
+	{
+		echo "Package: ${PACKAGE_NAME}"
+		echo "Architecture: $(jq -r '.architecture' "${PACKAGE_CONTROL_FILE}")"
+		echo "Maintainer: $(jq -r '.maintainer' "${PACKAGE_CONTROL_FILE}")"
+		echo "Priority: $(jq -r '.priority' "${PACKAGE_CONTROL_FILE}")"
+		echo "Version: ${PACKAGE_VERSION}"
+		echo "Description: $(jq -r '.description' "${PACKAGE_CONTROL_FILE}")"
+	} >> control
+
+}
+
+create_and_install_package()
+{
+	mkdir -p "${PACKAGE_BUILD_DIR}" || exit 1
+	pushd "${PACKAGE_BUILD_DIR}" || exit 1
+
+	PACKAGE_NAME="${PACKAGE_NAME_PREFIX}"-"${PACKAGE_VERSION}"
+	mkdir -p "${PACKAGE_NAME}"/DEBIAN
+	pushd "${PACKAGE_NAME}"/DEBIAN || exit 1
+	create_package_control_file
+
+	popd || exit 1
+	mkdir -p "${PACKAGE_NAME}"/usr/bin
+
+	cp "${HW0_INSTALL_PREFIX}"/${EXECUTABLE_NAME} "${PACKAGE_NAME}"/usr/bin
+
+	dpkg-deb --build "${PACKAGE_NAME}" || exit 1
+
+	cp "${PACKAGE_NAME}".deb "${HW0_INSTALL_PREFIX}"
+
+	popd || exit 1
+
+}
+
+
 
 error()
 {
@@ -106,6 +149,9 @@ configure()
 
 	if [ -n "${HW0_BUILD_NUMBER}" ]; then
 		PROJECT_VERSION_BUILD=${HW0_BUILD_NUMBER}
+		PACKAGE_VERSION=${PACKAGE_VERSION}.${HW0_BUILD_NUMBER}
+	else
+		PACKAGE_VERSION=${PACKAGE_VERSION}.0
 	fi
 
 	CMAKE_CMD+=" -DHW0_PROJECT_VERSION_BUILD:STRING=${PROJECT_VERSION_BUILD}"
@@ -134,6 +180,8 @@ get_version()
 	PROJECT_VERSION_MAJOR="$(jq '.major' "${VERSION_FILE}")"
 	PROJECT_VERSION_MINOR="$(jq '.minor' "${VERSION_FILE}")"
 	PROJECT_VERSION_BUILD=$(jq '.build' "${VERSION_FILE}")
+
+	PACKAGE_VERSION="${PROJECT_VERSION_MAJOR}"."${PROJECT_VERSION_MINOR}"
 }
 
 args=( "$@" )
@@ -167,7 +215,7 @@ fi
 
 get_version
 
-if [ -z ${SKIP_HW0_CONFIGURATION} ]; then
+if [ -z "${SKIP_HW0_CONFIGURATION}" ]; then
 
 	clean_build_dir
 	configure
@@ -175,3 +223,4 @@ if [ -z ${SKIP_HW0_CONFIGURATION} ]; then
 fi
 
 build_project
+create_and_install_package
