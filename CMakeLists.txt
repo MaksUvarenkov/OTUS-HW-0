@@ -4,6 +4,7 @@ project(HelloTask
     LANGUAGES CXX
 )
 
+#https://webhostinggeeks.com/howto/how-to-upgrade-gcc-on-ubuntu/
 if (CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 13.1)
     message(FATAL_ERROR "Require at least gcc-13.1")
 endif()
@@ -14,8 +15,6 @@ set(PROJECT_VERSION_BUILD 115)
 
 message(PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 configure_file(${PROJECT_SOURCE_DIR}/src/versioning/ProjectVersion.h.in ${PROJECT_SOURCE_DIR}/src/versioning/ProjectVersion.h)
-
-#https://webhostinggeeks.com/howto/how-to-upgrade-gcc-on-ubuntu/
 
 
 set(CMAKE_CXX_STANDARD 23)
