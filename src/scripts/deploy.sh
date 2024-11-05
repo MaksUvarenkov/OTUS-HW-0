@@ -12,6 +12,10 @@ HW0_INSTALL_PATH=${HW0_BINARY_DIR}/install
 HW0_BUILD_NUMBER=0
 CHECK_NINJA_INSTALLATION=0
 
+BUILD_DIR_PREFIX=build_
+BUILD_TYPE=Debug
+PRODUCTION_BUILD=0
+
 #This is hardcoded due to Home Work requirements
 PACKAGE_NAME_PREFIX=helloworld_uvarekov_otus_0
 
@@ -58,8 +62,10 @@ process_option()
 		CHECK_NINJA_INSTALLATION=1
 	;;
 
-	--no-production)
-		HW0_CONFIGURE_ARGUMENTS+=" --minsizerel"
+	--production)
+		BUILD_TYPE=MinSizeRel
+		ARGUMENTS="${ARGUMENTS} -DPRODUCTION_BUILD:BOOL=TRUE"
+		PRODUCTION_BUILD=1
 	;;
 
 	--*)
@@ -107,4 +113,6 @@ if [ ${CHECK_NINJA_INSTALLATION} -gt 0 ]; then
 fi
 
 args=( "$@" )
-printf "%s [ %s ]\n" "Build arguments: " "${args[@]}"
+printf "Build arguments: [ "
+printf "%s " "${args[@]}"
+printf " ]\n"
