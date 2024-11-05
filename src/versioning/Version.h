@@ -22,6 +22,7 @@ namespace otus_hw_0 {
 		static constexpr uint32_t VersionConversion(std::string_view majorVersion) {
 
 			uint32_t ver;
+			//# gcc, GCC, G++ 13+ required for constexpr std:from_chars
 			auto result = std::from_chars(majorVersion.data(), majorVersion.data() + majorVersion.size(), ver);
 			if (result.ec == std::errc::invalid_argument) {
 				throw std::invalid_argument(
