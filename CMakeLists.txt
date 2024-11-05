@@ -13,7 +13,6 @@ set(PROJECT_VERSION_MAJOR 1)
 set(PROJECT_VERSION_MINOR 119)
 set(PROJECT_VERSION_BUILD 115)
 
-message(PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 configure_file(${PROJECT_SOURCE_DIR}/src/versioning/ProjectVersion.h.in ${PROJECT_SOURCE_DIR}/src/versioning/ProjectVersion.h)
 
 
