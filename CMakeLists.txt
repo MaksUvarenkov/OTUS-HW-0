@@ -18,7 +18,7 @@ set(PROJECT_VERSION_MINOR ${HW0_PROJECT_VERSION_MINOR})
 set(PROJECT_VERSION_BUILD ${HW0_PROJECT_VERSION_BUILD})
 
 set(DEFAULT_TARGET_NAME HelloTask)
-set(DEFAULT_BOOST_TESTS_NAME BoostTestsRun)
+set(DEFAULT_BOOST_TESTS_NAME BoostRunTests)
 
 configure_file(${PROJECT_SOURCE_DIR}/src/versioning/ProjectVersion.h.in ${PROJECT_SOURCE_DIR}/src/versioning/ProjectVersion.h)
 
@@ -36,7 +36,6 @@ endif()
 
 message("-- Target name: ${TARGET_EXEC_NAME}")
 message("-- Boost tests name: ${BOOST_TESTS_EXEC_NAME}")
-
 
 add_executable(${TARGET_EXEC_NAME} src/main.cpp
         src/versioning/Version.h)
@@ -60,8 +59,6 @@ else()
     install(TARGETS ${TARGET_LIST} DESTINATION ${PROJECT_SOURCE_DIR}/install)
 endif (DEFINED HW0_INSTALL_PREFIX)
 message("-- Install prefix is: ${CMAKE_INSTALL_PREFIX}")
-
-
 
 target_include_directories(HelloTask PRIVATE src)
 
