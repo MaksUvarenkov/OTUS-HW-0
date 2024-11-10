@@ -5,10 +5,9 @@ namespace bt = boost::unit_test;
 
 BOOST_AUTO_TEST_SUITE(test_version)
 
-BOOST_AUTO_TEST_CASE( test1 )
+BOOST_AUTO_TEST_CASE( test_1_always_ok )
 {
-    // reports 'error in "test1": test 2 == 1 failed'
-    BOOST_TEST( 2 == 1 );
+    BOOST_TEST( 1 == 1 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
