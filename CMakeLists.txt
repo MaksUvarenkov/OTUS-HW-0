@@ -7,6 +7,8 @@ project(HelloTask
 )
 
 option(WITH_BOOST_TEST "Whether to build Boost test" ON)
+option(WITH_DEFAULT_NON_ZERO_BUILD_NUMBER "Clion config helper for the tests to automatically pass" ON)
+
 
 #https://webhostinggeeks.com/howto/how-to-upgrade-gcc-on-ubuntu/
 if (CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 13.1)
@@ -15,7 +17,12 @@ endif()
 
 set(DEFAULT_PROJECT_VERSION_MAJOR 1)
 set(DEFAULT_PROJECT_VERSION_MINOR 119)
-set(DEFAULT_PROJECT_VERSION_BUILD 0)
+
+if(WITH_DEFAULT_NON_ZERO_BUILD_NUMBER)
+    set(DEFAULT_PROJECT_VERSION_BUILD 117)
+else()
+    set(DEFAULT_PROJECT_VERSION_BUILD 0)
+endif()
 
 if (DEFINED HW0_PROJECT_VERSION_MAJOR)
     set(PROJECT_VERSION_MAJOR ${HW0_PROJECT_VERSION_MAJOR})
@@ -24,13 +31,13 @@ else ()
 endif ()
 
 if (DEFINED HW0_PROJECT_VERSION_MINOR)
-    set(PROJECT_VERSION_MAJOR ${HW0_PROJECT_VERSION_MINOR})
+    set(PROJECT_VERSION_MINOR ${HW0_PROJECT_VERSION_MINOR})
 else ()
     set(PROJECT_VERSION_MINOR ${DEFAULT_PROJECT_VERSION_MINOR})
 endif ()
 
 if (DEFINED HW0_PROJECT_VERSION_BUILD)
-    set(PROJECT_VERSION_MAJOR ${HW0_PROJECT_VERSION_BUILD})
+    set(PROJECT_VERSION_BUILD ${HW0_PROJECT_VERSION_BUILD})
 else ()
     set(PROJECT_VERSION_BUILD ${DEFAULT_PROJECT_VERSION_BUILD})
 endif ()
@@ -56,17 +63,19 @@ message("-- Target name: ${TARGET_EXEC_NAME}")
 message("-- Boost tests name: ${BOOST_TESTS_EXEC_NAME}")
 
 add_executable(${TARGET_EXEC_NAME} src/main.cpp)
+target_include_directories(${TARGET_EXEC_NAME} PRIVATE src)
 
 set(TARGET_LIST ${TARGET_EXEC_NAME})
 
 if(WITH_BOOST_TEST)
-    message("-- Adding tests")
-    enable_testing()
     add_subdirectory(tests/boost)
     set(TARGET_LIST ${TARGET_LIST} "${BOOST_TESTS_EXEC_NAME}")
     #    How to add it properly in top-level CmakeLists,txt?
     add_dependencies(${TARGET_EXEC_NAME} ${BOOST_TESTS_EXEC_NAME})
+    message("-- Adding tests")
+    enable_testing()
 endif()
+
 
 if (DEFINED HW0_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX ${HW0_INSTALL_PREFIX})
@@ -76,10 +85,4 @@ else()
     install(TARGETS ${TARGET_LIST} DESTINATION ${PROJECT_SOURCE_DIR}/install)
 endif (DEFINED HW0_INSTALL_PREFIX)
 message("-- Install prefix is: ${CMAKE_INSTALL_PREFIX}")
-
-target_include_directories(HelloTask PRIVATE src)
-
-
-
-
 

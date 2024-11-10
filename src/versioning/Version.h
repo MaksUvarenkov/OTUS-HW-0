@@ -78,6 +78,18 @@ namespace otus_hw_0 {
 		}
 
 		friend inline std::ostream &operator<<(std::ostream &os, const Version &version);
+
+		[[nodiscard]] uint32_t GetMajorVersion() const {
+			return _majorVersion;
+		}
+
+		[[nodiscard]] uint32_t GetMinorVersion() const {
+			return _minorVersion;
+		}
+
+		[[nodiscard]] uint32_t GetBuildVersion() const {
+			return _buildVersion;
+		}
 	};
 
 	inline std::ostream &operator<<(std::ostream &os, const Version &version) {
