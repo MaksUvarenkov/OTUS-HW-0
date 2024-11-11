@@ -9,6 +9,7 @@ project(HelloTask
 option(WITH_BOOST_TEST "Whether to build Boost test" ON)
 option(WITH_DEFAULT_NON_ZERO_BUILD_NUMBER "Clion config helper for the tests to automatically pass" ON)
 
+#Check the build
 
 #https://webhostinggeeks.com/howto/how-to-upgrade-gcc-on-ubuntu/
 if (CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 13.1)
