@@ -40,6 +40,10 @@ jobs:
           chmod -R +x ./src/scripts 
           ./src/scripts/deploy.sh --build-number=${{ github.run_number }} --ninja
 
+      - name: Show version variable
+        run: |
+          echo "Version is ${PACKAGE_VERSION}"
+
       - name: Create release artifacts
         id: create_release
         uses: actions/create-release@v1
