@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.24)
 
+#https://stackoverflow.com/questions/73952766/code-wont-run-after-run-task-error-invalid-value-c23-in-std-c
+# We can't use C++23 for now with clang-tidy-15 for example
+# That's why static analyser is disabled here.
+# And std::from_chars has constexpr variant in C++23 only. I like it.
 set(CMAKE_CXX_STANDARD 23)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(HelloTask
     LANGUAGES CXX

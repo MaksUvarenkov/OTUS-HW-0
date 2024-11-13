@@ -27,11 +27,14 @@ jobs:
       - name: Install build dependencies
         run: sudo apt update -y && sudo apt install -y clang-format clang-tidy g++ cmake libboost-all-dev ninja-build
 
-#      - name: Coding Style checks
-#        run: ${{github.workspace}}/format.sh check
+      - name: Allow deploy scripts to execute
+        shell: bash
+        run: |
+          chmod -R +x ./src/scripts 
 
-#      - name: Run static analysis
-#        run: ./static-analysis.sh -p ${{github.workspace}}/build
+      - name: Code Style check
+        shell: bash
+        run: ./src/scripts/deploy/format.sh check
 
       - name: Build
         # Tests are included in cmake.
@@ -39,6 +42,11 @@ jobs:
         run: |
           chmod -R +x ./src/scripts 
           ./src/scripts/deploy/deploy.sh --build-number=${{ github.run_number }} --ninja
+
+#      std::from_chars has constexpr ctor only in C++23
+#      clang-tidy-15 (most relevant available for now) can't work with c++23
+#      - name: Run static analysis
+#        run: ./src/scripts/static_analyzer/clang/static-analysis.sh
 
       - name: Show version variable
         run: |

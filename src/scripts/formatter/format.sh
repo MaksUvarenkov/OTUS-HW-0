@@ -11,6 +11,6 @@ if [[ "$1" == "check" ]]; then
     OPTS="${OPTS} --Werror --dry-run"
 fi
 
-find "$HW0_ROOT_DIR" -not -path "*build/*" -and \( -name "*.h" -or -name "*.cpp" \) -print0 | \
+find "$HW0_ROOT_DIR" -not -path "*build/*" -and -not -path "*install/*" -and -not -path "*cmake-build-debug/*" \( -name "*.h" -or -name "*.cpp" \) -print0 | \
 xargs -0 $CLANG_FORMAT $OPTS
 
