@@ -4,8 +4,9 @@
 [ -z "$(command -v jq)" ] && printf "%s\n" "ERROR: jq utility must be installed!" && exit 1
 [ -z "$(command -v dpkg-deb)" ] && printf "%s\n" "ERROR: dpkg-deb not found!" && exit 1
 
-HW0_BINARY_DIR="$(pwd)"
-HW0_SCRIPTS_DIR="${HW0_BINARY_DIR}"/src/scripts
+# Allways run this script from project ROOT directory, not from script directory!!
+HW0_ROOT_DIR="$(pwd)"
+HW0_SCRIPTS_DIR="${HW0_ROOT_DIR}"/src/scripts
 
 HW0_CONFIGURE_ARGUMENTS=
 HW0_MAKE_ARGUMENTS=
@@ -14,19 +15,19 @@ HW0_BUILD_TOOL="make"
 HW0_BUILD_NUMBER=0
 CHECK_NINJA_INSTALLATION=0
 
-BUILD_DIR="${HW0_BINARY_DIR}"/build
+BUILD_DIR="${HW0_ROOT_DIR}"/build
 BUILD_TYPE=Debug
 PRODUCTION_BUILD=0
-HW0_DEFAULT_INSTALL_PREFIX="${HW0_BINARY_DIR}"/install
+HW0_DEFAULT_INSTALL_PREFIX="${HW0_ROOT_DIR}"/install
 HW0_INSTALL_PREFIX=${HW0_DEFAULT_INSTALL_PREFIX}
 
-VERSION_FILE="${HW0_BINARY_DIR}"/src/versioning/Version.json
+VERSION_FILE="${HW0_ROOT_DIR}"/src/versioning/Version.json
 
 # PACKAGE_NAME_PREFIX hardcoded due to Home Work requirements
 PACKAGE_NAME_PREFIX=helloworld-uvarenkov
 PACKAGE_BUILD_DIR="${BUILD_DIR}"/package_build
 PACKAGE_VERSION=0.0.0
-PACKAGE_CONTROL_FILE="${HW0_BINARY_DIR}"/src/package/control.json
+PACKAGE_CONTROL_FILE="${HW0_ROOT_DIR}"/src/package/control.json
 MAIN_TARGET_EXECUTABLE_NAME=HelloTask
 BOOST_TESTS_EXEC_NAME=BoostRunTests
 
@@ -167,7 +168,7 @@ configure()
 
 	CMAKE_CMD+=" -DHW0_PROJECT_VERSION_BUILD:STRING=${PROJECT_VERSION_BUILD}"
 
-	CMAKE_CMD+=" -S ${HW0_BINARY_DIR}"
+	CMAKE_CMD+=" -S ${HW0_ROOT_DIR}"
 	CMAKE_CMD+=" -B ${BUILD_DIR}"
 	printf "%s\n" "[CONFIG] CMAKE_ARGS: ${CMAKE_CMD}"
 

@@ -38,7 +38,7 @@ jobs:
         shell: bash
         run: |
           chmod -R +x ./src/scripts 
-          ./src/scripts/deploy.sh --build-number=${{ github.run_number }} --ninja
+          ./src/scripts/deploy/deploy.sh --build-number=${{ github.run_number }} --ninja
 
       - name: Show version variable
         run: |
