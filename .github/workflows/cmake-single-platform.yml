@@ -34,7 +34,7 @@ jobs:
 
       - name: Code Style check
         shell: bash
-        run: ./src/scripts/deploy/format.sh check
+        run: ./src/scripts/formatter/format.sh check
 
       - name: Build
         # Tests are included in cmake.
